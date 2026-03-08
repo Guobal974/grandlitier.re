@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Bilan Sommeil — Grand Litier Réunion</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #12151a;
+  --ink2: #2a2f3a;
+  --slate: #4a5568;
+  --mist: #8896a8;
+  --gold: #d4a853;
+  --gold2: #e8c27a;
+  --gold-pale: rgba(212,168,83,0.12);
+  --sky: #e8f0f7;
+  --cloud: #f4f7fa;
+  --white: #ffffff;
+  --green: #2d6a4f;
+  --green-pale: rgba(45,106,79,0.1);
+  --amber: #c17a2d;
+  --amber-pale: rgba(193,122,45,0.1);
+  --red: #b5393c;
+  --red-pale: rgba(181,57,60,0.1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  height: 100%;
+  height: 100dvh;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--ink);
+  color: var(--ink);
+  overflow: hidden;
+}
+
+/* ── SCREENS ── */
+.screen { display: none; height: 100vh; height: 100dvh; flex-direction: column; min-height: 0; }
+.screen.active { display: flex; }
+
+/* ═══════════════════════════════
+   SCREEN 0 — WELCOME / ATTRACT
+═══════════════════════════════ */
+#s-attract {
+  background: var(--ink);
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.attract-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 20% 80%, rgba(212,168,83,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 80% 20%, rgba(100,130,180,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 80% at 50% 50%, rgba(18,21,26,0) 0%, var(--ink) 100%);
+  animation: bgBreath 8s ease-in-out infinite;
+}
+
+@keyframes bgBreath {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.attract-stars {
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 1px),
+    radial-gradient(circle, rgba(212,168,83,0.4) 1px, transparent 1px);
+  background-size: 120px 120px, 200px 200px;
+  background-position: 0 0, 60px 60px;
+  animation: starDrift 20s linear infinite;
+  opacity: 0.3;
+}
+
+@keyframes starDrift { from { transform: translateY(0); } to { transform: translateY(-120px); } }
+
+.attract-content {
+  position: relative;
+  text-align: center;
+  animation: attractIn 1.2s cubic-bezier(0.16,1,0.3,1);
+}
+
+@keyframes attractIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.attract-moon {
+  font-size: 72px;
+  display: block;
+  margin-bottom: 24px;
+  animation: moonFloat 4s ease-in-out infinite;
+  filter: drop-shadow(0 0 30px rgba(212,168,83,0.5));
+}
+
+@keyframes moonFloat {
+  0%,100% { transform: translateY(0) rotate(-5deg); }
+  50% { transform: translateY(-12px) rotate(5deg); }
+}
+
+.attract-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 56px;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.1;
+  margin-bottom: 10px;
+  letter-spacing: -0.02em;
+}
+
+.attract-title em {
+  font-style: italic;
+  color: var(--gold2);
+}
+
+.attract-sub {
+  font-size: 18px;
+  color: var(--mist);
+  font-weight: 300;
+  margin-bottom: 48px;
+  letter-spacing: 0.02em;
+}
+
+.attract-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--gold);
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 600;
+  padding: 18px 40px;
+  border-radius: 50px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 8px 32px rgba(212,168,83,0.4);
+  animation: ctaPulse 3s ease-in-out infinite;
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+}
+
+@keyframes ctaPulse {
+  0%,100% { box-shadow: 0 8px 32px rgba(212,168,83,0.4); }
+  50% { box-shadow: 0 12px 48px rgba(212,168,83,0.6); }
+}
+
+.attract-cta:hover { transform: scale(1.04); background: var(--gold2); }
+
+.attract-duration {
+  margin-top: 24px;
+  font-size: 13px;
+  color: var(--mist);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.attract-pillars {
+  display: flex;
+  gap: 32px;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.attract-pillar {
+  text-align: center;
+  opacity: 0.6;
+}
+
+.attract-pillar-icon { font-size: 22px; display: block; margin-bottom: 6px; }
+.attract-pillar-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mist); }
+
+/* ═══════════════════════════════
+   SCREEN 1 — QUESTIONS
+═══════════════════════════════ */
+#s-quiz {
+  background: var(--cloud);
+}
+
+.quiz-header {
+  background: var(--white);
+  padding: 20px 36px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  flex-shrink: 0;
+}
+
+.quiz-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.quiz-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.quiz-logo span { color: var(--gold); }
+
+.quiz-qcount {
+  font-size: 13px;
+  color: var(--mist);
+  font-weight: 500;
+}
+
+.progress-track {
+  height: 3px;
+  background: var(--sky);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: -1px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold2));
+  border-radius: 2px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.quiz-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 32px 36px 24px;
+  min-height: 0;
+}
+
+.quiz-body::-webkit-scrollbar { width: 4px; }
+.quiz-body::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 2px; }
+
+.question-block { animation: qIn 0.4s cubic-bezier(0.16,1,0.3,1); }
+
+@keyframes qIn {
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.q-category {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+  background: var(--gold-pale);
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+  border: 1px solid rgba(212,168,83,0.25);
+}
+
+.q-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 30px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.3;
+  margin-bottom: 8px;
+}
+
+.q-hint {
+  font-size: 14px;
+  color: var(--mist);
+  margin-bottom: 28px;
+  font-weight: 300;
+}
+
+/* Answer styles */
+.answers-list { display: flex; flex-direction: column; gap: 10px; }
+
+.answer-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--white);
+  border: 2px solid transparent;
+  border-radius: 14px;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.answer-item:hover { border-color: rgba(212,168,83,0.4); background: rgba(212,168,83,0.03); transform: translateX(4px); }
+.answer-item.selected { border-color: var(--gold); background: var(--gold-pale); }
+
+.answer-emoji { font-size: 24px; flex-shrink: 0; width: 36px; text-align: center; }
+.answer-text { flex: 1; font-size: 16px; font-weight: 500; color: var(--ink); }
+.answer-sub { font-size: 12px; color: var(--mist); margin-top: 2px; font-weight: 300; }
+.answer-radio {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: 2px solid rgba(0,0,0,0.15);
+  flex-shrink: 0;
+  position: relative;
+  transition: all 0.2s;
+}
+.answer-radio::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  background: var(--gold);
+  border-radius: 50%;
+  transform: scale(0);
+  transition: transform 0.2s;
+}
+.answer-item.selected .answer-radio { border-color: var(--gold); }
+.answer-item.selected .answer-radio::after { transform: scale(1); }
+
+/* Grid answers */
+.answers-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.answer-card {
+  background: var(--white);
+  border: 2px solid transparent;
+  border-radius: 16px;
+  padding: 22px 16px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.answer-card:hover { border-color: rgba(212,168,83,0.4); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+.answer-card.selected { border-color: var(--gold); background: var(--gold-pale); box-shadow: 0 0 0 1px var(--gold); }
+.answer-card-emoji { font-size: 32px; margin-bottom: 10px; display: block; }
+.answer-card-text { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.answer-card-sub { font-size: 12px; color: var(--mist); font-weight: 300; }
+
+/* Scale answers */
+.answers-scale {
+  display: flex;
+  gap: 8px;
+}
+
+.scale-item {
+  flex: 1;
+  background: var(--white);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 18px 8px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.scale-item:hover { border-color: rgba(212,168,83,0.4); }
+.scale-item.selected { border-color: var(--gold); background: var(--gold-pale); }
+.scale-num { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+.scale-label { font-size: 10px; color: var(--mist); text-transform: uppercase; letter-spacing: 0.06em; }
+
+.scale-extremes {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--mist);
+  padding: 0 4px;
+}
+
+.quiz-footer {
+  background: var(--white);
+  border-top: 1px solid rgba(0,0,0,0.06);
+  padding: 16px 36px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.btn-quiz-back {
+  background: none;
+  border: 1.5px solid rgba(0,0,0,0.12);
+  color: var(--slate);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 24px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-quiz-back:hover { background: var(--sky); }
+
+.btn-quiz-next {
+  background: var(--ink);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 14px 32px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.03em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-quiz-next:hover { background: var(--gold); color: var(--ink); transform: translateY(-1px); }
+.btn-quiz-next:disabled { background: rgba(0,0,0,0.1); color: var(--mist); cursor: not-allowed; transform: none; }
+
+.quiz-skip { font-size: 13px; color: var(--mist); cursor: pointer; text-decoration: underline; }
+.quiz-skip:hover { color: var(--slate); }
+
+/* ═══════════════════════════════
+   SCREEN 2 — LOADING
+═══════════════════════════════ */
+#s-loading {
+  background: var(--ink);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.loading-orb {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  margin: 0 auto 32px;
+}
+
+.orb-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: var(--gold);
+  animation: spin 1.2s linear infinite;
+}
+
+.orb-ring:nth-child(2) {
+  inset: 10px;
+  border-top-color: var(--gold2);
+  animation-duration: 0.9s;
+  animation-direction: reverse;
+}
+
+.orb-ring:nth-child(3) {
+  inset: 20px;
+  border-top-color: rgba(212,168,83,0.4);
+  animation-duration: 1.5s;
+}
+
+.orb-center {
+  position: absolute;
+  inset: 35px;
+  background: var(--gold);
+  border-radius: 50%;
+  animation: orbPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes orbPulse { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(0.8); opacity: 0.6; } }
+
+.loading-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  color: var(--white);
+  margin-bottom: 10px;
+}
+
+.loading-sub { font-size: 15px; color: var(--mist); }
+
+.loading-steps {
+  margin-top: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 300px;
+}
+
+.loading-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 10px;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: all 0.5s;
+}
+
+.loading-step.appear { opacity: 1; transform: translateX(0); }
+.loading-step-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+.loading-step-text { font-size: 13px; color: var(--mist); }
+
+/* ═══════════════════════════════
+   SCREEN 3 — RESULTS
+═══════════════════════════════ */
+#s-result {
+  background: var(--cloud);
+}
+
+.result-header {
+  background: var(--ink);
+  padding: 28px 36px 32px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.result-header-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(212,168,83,0.15) 0%, transparent 60%);
+}
+
+.result-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.result-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  color: var(--white);
+  opacity: 0.7;
+}
+.result-logo span { color: var(--gold); opacity: 1; }
+
+.result-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--gold);
+  font-weight: 600;
+  background: rgba(212,168,83,0.15);
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(212,168,83,0.3);
+}
+
+.result-score-block {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.score-donut {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  flex-shrink: 0;
+}
+
+.score-donut svg { transform: rotate(-90deg); }
+
+.score-donut-bg { fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 8; }
+.score-donut-fill { fill: none; stroke-width: 8; stroke-linecap: round; transition: stroke-dasharray 1.5s cubic-bezier(0.4,0,0.2,1); }
+
+.score-donut-text {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+
+.score-number {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1;
+}
+
+.score-max { font-size: 12px; color: var(--mist); }
+
+.result-title-block { flex: 1; }
+
+.result-grade {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 4px 12px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.grade-good { background: var(--green-pale); color: #4ade80; border: 1px solid rgba(74,222,128,0.3); }
+.grade-medium { background: var(--amber-pale); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+.grade-poor { background: var(--red-pale); color: #f87171; border: 1px solid rgba(248,113,113,0.3); }
+
+.result-main-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  color: var(--white);
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+
+.result-main-sub { font-size: 14px; color: var(--mist); font-weight: 300; line-height: 1.5; }
+
+.result-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 24px 36px 20px;
+  min-height: 0;
+}
+
+.result-body::-webkit-scrollbar { width: 4px; }
+.result-body::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 2px; }
+
+/* Dimension bars */
+.dimensions-section {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 16px;
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--mist);
+  margin-bottom: 18px;
+}
+
+.dimension-row {
+  margin-bottom: 14px;
+}
+
+.dimension-row:last-child { margin-bottom: 0; }
+
+.dim-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+
+.dim-name { font-size: 14px; font-weight: 500; color: var(--ink); }
+.dim-score-text { font-size: 13px; font-weight: 600; color: var(--slate); }
+
+.dim-bar-track {
+  height: 6px;
+  background: var(--sky);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.dim-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fill-good { background: linear-gradient(90deg, #34d399, #10b981); }
+.fill-medium { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+.fill-poor { background: linear-gradient(90deg, #f87171, #ef4444); }
+
+/* Insight cards */
+.insights-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.insight-card {
+  background: var(--white);
+  border-radius: 14px;
+  padding: 18px;
+  border-left: 3px solid transparent;
+}
+
+.insight-card.positive { border-left-color: #10b981; }
+.insight-card.warning { border-left-color: #f59e0b; }
+.insight-card.alert { border-left-color: #ef4444; }
+
+.insight-icon { font-size: 22px; margin-bottom: 8px; display: block; }
+.insight-title { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.insight-text { font-size: 12px; color: var(--slate); line-height: 1.5; font-weight: 300; }
+
+/* Recommendation CTA */
+.recommendation-cta {
+  background: var(--ink);
+  border-radius: 18px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.rec-cta-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 90% 50%, rgba(212,168,83,0.2) 0%, transparent 60%);
+}
+
+.rec-cta-content { position: relative; }
+
+.rec-cta-tag {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+
+.rec-cta-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  color: var(--white);
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.rec-cta-sub { font-size: 13px; color: var(--mist); margin-bottom: 18px; line-height: 1.6; }
+
+.rec-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--gold);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 13px 26px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  transition: all 0.2s;
+}
+
+.rec-cta-btn:hover { background: var(--gold2); transform: translateY(-1px); }
+
+/* Tips */
+.tips-section {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 16px;
+}
+
+.tips-list { display: flex; flex-direction: column; gap: 12px; margin-top: 14px; }
+
+.tip-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  background: var(--cloud);
+  border-radius: 10px;
+}
+
+.tip-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.tip-text { font-size: 13px; color: var(--slate); line-height: 1.5; font-weight: 300; }
+.tip-text strong { color: var(--ink); font-weight: 600; }
+
+.result-footer {
+  background: var(--white);
+  border-top: 1px solid rgba(0,0,0,0.06);
+  padding: 16px 36px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.btn-restart {
+  background: none;
+  border: 1.5px solid rgba(0,0,0,0.12);
+  color: var(--slate);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 11px 22px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-restart:hover { background: var(--sky); }
+
+.btn-vendeur {
+  background: var(--ink);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 13px 28px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.03em;
+}
+
+.btn-vendeur:hover { background: var(--gold); color: var(--ink); }
+
+/* Score print badge */
+.score-share {
+  text-align: center;
+  padding: 14px;
+  background: var(--gold-pale);
+  border-radius: 10px;
+  border: 1px solid rgba(212,168,83,0.25);
+  font-size: 13px;
+  color: var(--slate);
+  flex: 1;
+  margin-left: 16px;
+}
+
+.score-share strong { color: var(--ink); display: block; font-size: 15px; margin-bottom: 2px; }
+
+@media (max-width: 768px) {
+  .attract-title { font-size: 34px; }
+  .attract-moon { font-size: 52px; }
+  .attract-cta { font-size: 15px; padding: 16px 28px; }
+  .attract-pillars { gap: 16px; }
+
+  .quiz-header { padding: 12px 16px 0; }
+  .quiz-body { padding: 16px 16px 12px; }
+  .quiz-footer {
+    padding: 12px 16px;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+    gap: 8px;
+  }
+
+  .q-text { font-size: 22px; }
+  .q-hint { font-size: 13px; margin-bottom: 18px; }
+  .q-category { font-size: 10px; margin-bottom: 10px; }
+
+  .answer-item { padding: 12px 14px; gap: 12px; }
+  .answer-text { font-size: 14px; }
+  .answer-emoji { font-size: 20px; width: 28px; }
+  .answers-list { gap: 8px; }
+
+  .answers-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .answer-card { padding: 14px 10px; }
+  .answer-card-emoji { font-size: 24px; margin-bottom: 6px; }
+  .answer-card-text { font-size: 13px; }
+  .answer-card-sub { font-size: 11px; }
+
+  .scale-item { padding: 12px 4px; }
+  .scale-num { font-size: 20px; }
+
+  .btn-quiz-back { padding: 10px 16px; font-size: 13px; }
+  .btn-quiz-next { padding: 12px 22px; font-size: 13px; }
+  .quiz-skip { font-size: 12px; }
+
+  .result-header { padding: 16px 16px 20px; }
+  .result-body { padding: 16px 16px 12px; }
+  .result-footer {
+    padding: 12px 16px;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .score-share { margin-left: 0; flex-basis: 100%; order: -1; }
+  .result-main-title { font-size: 20px; }
+  .result-main-sub { font-size: 13px; }
+  .score-donut { width: 80px; height: 80px; }
+  .score-donut svg { width: 80px; height: 80px; }
+  .score-number { font-size: 22px; }
+
+  .insights-grid { grid-template-columns: 1fr; }
+  .dimensions-section, .tips-section, .recommendation-cta { padding: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════ SCREEN 0: ATTRACT ════ -->
+<div class="screen active" id="s-attract" onclick="startQuiz()">
+  <div class="attract-bg"></div>
+  <div class="attract-stars"></div>
+  <div class="attract-content">
+    <span class="attract-moon">🌙</span>
+    <div class="attract-title">Votre <em>sommeil</em><br>mérite mieux</div>
+    <div class="attract-sub">Découvrez la qualité réelle de votre sommeil en 2 minutes</div>
+    <button class="attract-cta" onclick="startQuiz()">
+      Commencer mon bilan gratuit →
+    </button>
+    <div class="attract-duration">⏱ 2 minutes · 12 questions · Résultat immédiat</div>
+    <div class="attract-pillars">
+      <div class="attract-pillar"><span class="attract-pillar-icon">😴</span><div class="attract-pillar-label">Qualité</div></div>
+      <div class="attract-pillar"><span class="attract-pillar-icon">🔋</span><div class="attract-pillar-label">Énergie</div></div>
+      <div class="attract-pillar"><span class="attract-pillar-icon">🦴</span><div class="attract-pillar-label">Confort</div></div>
+      <div class="attract-pillar"><span class="attract-pillar-icon">🌡️</span><div class="attract-pillar-label">Thermique</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ SCREEN 1: QUIZ ════ -->
+<div class="screen" id="s-quiz">
+  <div class="quiz-header">
+    <div class="quiz-topbar">
+      <div class="quiz-logo">Grand <span>Litier</span></div>
+      <div class="quiz-qcount" id="q-count">Question 1 / 12</div>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill" style="width: 8%"></div>
+    </div>
+  </div>
+  <div class="quiz-body" id="quiz-body">
+    <!-- questions injected here -->
+  </div>
+  <div class="quiz-footer">
+    <button class="btn-quiz-back" id="btn-back" onclick="prevQuestion()" style="visibility:hidden">← Retour</button>
+    <span class="quiz-skip" id="quiz-skip" onclick="skipQuestion()">Passer</span>
+    <button class="btn-quiz-next" id="btn-next" onclick="nextQuestion()" disabled>Suivant →</button>
+  </div>
+</div>
+
+<!-- ════ SCREEN 2: LOADING ════ -->
+<div class="screen" id="s-loading">
+  <div class="loading-orb">
+    <div class="orb-ring"></div>
+    <div class="orb-ring"></div>
+    <div class="orb-ring"></div>
+    <div class="orb-center"></div>
+  </div>
+  <div class="loading-title">Analyse en cours…</div>
+  <div class="loading-sub">Calcul de votre profil sommeil personnalisé</div>
+  <div class="loading-steps" id="loading-steps">
+    <div class="loading-step" id="ls-1"><div class="loading-step-dot"></div><div class="loading-step-text">Analyse de la qualité de sommeil</div></div>
+    <div class="loading-step" id="ls-2"><div class="loading-step-dot"></div><div class="loading-step-text">Évaluation du confort et des douleurs</div></div>
+    <div class="loading-step" id="ls-3"><div class="loading-step-dot"></div><div class="loading-step-text">Profil thermique Réunion</div></div>
+    <div class="loading-step" id="ls-4"><div class="loading-step-dot"></div><div class="loading-step-text">Génération du rapport personnalisé</div></div>
+  </div>
+</div>
+
+<!-- ════ SCREEN 3: RESULT ════ -->
+<div class="screen" id="s-result">
+  <div class="result-header">
+    <div class="result-header-bg"></div>
+    <div class="result-topbar">
+      <div class="result-logo">Grand <span>Litier</span> Réunion</div>
+      <div class="result-label">Bilan Sommeil</div>
+    </div>
+    <div class="result-score-block">
+      <div class="score-donut">
+        <svg width="110" height="110" viewBox="0 0 110 110">
+          <circle class="score-donut-bg" cx="55" cy="55" r="46"/>
+          <circle class="score-donut-fill" id="donut-fill" cx="55" cy="55" r="46"
+            stroke-dasharray="0 289" stroke="#d4a853"/>
+        </svg>
+        <div class="score-donut-text">
+          <div class="score-number" id="score-num">0</div>
+          <div class="score-max">/100</div>
+        </div>
+      </div>
+      <div class="result-title-block">
+        <div class="result-grade" id="result-grade">Analyse</div>
+        <div class="result-main-title" id="result-main-title">Votre profil sommeil</div>
+        <div class="result-main-sub" id="result-main-sub">Résultat personnalisé</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="result-body">
+    <!-- Dimension bars -->
+    <div class="dimensions-section">
+      <div class="section-label">Analyse par dimension</div>
+      <div id="dimensions-container"><!-- injected --></div>
+    </div>
+
+    <!-- Insights -->
+    <div class="insights-grid" id="insights-container"><!-- injected --></div>
+
+    <!-- Reco CTA -->
+    <div class="recommendation-cta">
+      <div class="rec-cta-bg"></div>
+      <div class="rec-cta-content">
+        <div class="rec-cta-tag">✦ Recommandation Grand Litier</div>
+        <div class="rec-cta-title" id="reco-title">Votre matelas idéal existe</div>
+        <div class="rec-cta-sub" id="reco-sub">Nos conseillers peuvent vous guider vers la solution adaptée à votre profil.</div>
+        <button class="rec-cta-btn" onclick="callVendeur()">
+          🛏 Parler à un conseiller maintenant
+        </button>
+      </div>
+    </div>
+
+    <!-- Tips -->
+    <div class="tips-section">
+      <div class="section-label">Conseils personnalisés pour ce soir</div>
+      <div class="tips-list" id="tips-container"><!-- injected --></div>
+    </div>
+  </div>
+
+  <div class="result-footer">
+    <button class="btn-restart" onclick="restartApp()">↺ Recommencer</button>
+    <div class="score-share">
+      <strong id="share-code">Votre code : —</strong>
+      Montrez ce résultat à votre conseiller
+    </div>
+    <button class="btn-vendeur" onclick="callVendeur()">Appeler un conseiller →</button>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════
+//  QUESTIONS DATABASE
+// ════════════════════════════════════════
+const questions = [
+  {
+    id: 'endormissement',
+    category: '😴 Endormissement',
+    dimension: 'Qualité',
+    text: 'Combien de temps mettez-vous généralement à vous endormir ?',
+    hint: 'Le temps d\'endormissement est un indicateur clé de la qualité du sommeil',
+    type: 'list',
+    options: [
+      { emoji: '⚡', text: 'Moins de 10 minutes', sub: 'Je m\'endors rapidement', score: 10 },
+      { emoji: '✅', text: '10 à 20 minutes', sub: 'Délai normal et sain', score: 8 },
+      { emoji: '⏳', text: '20 à 45 minutes', sub: 'Un peu long', score: 5 },
+      { emoji: '😩', text: 'Plus de 45 minutes', sub: 'Difficultés d\'endormissement', score: 2 },
+    ]
+  },
+  {
+    id: 'reveils',
+    category: '🌙 Continuité',
+    dimension: 'Qualité',
+    text: 'Combien de fois vous réveillez-vous dans la nuit ?',
+    hint: 'Les micro-réveils fragmentent le sommeil profond réparateur',
+    type: 'scale',
+    scaleLabels: { min: 'Jamais', max: 'Souvent' },
+    options: [
+      { text: '0', sub: 'Jamais', score: 10 },
+      { text: '1', sub: 'Rarement', score: 8 },
+      { text: '2', sub: 'Parfois', score: 5 },
+      { text: '3', sub: 'Souvent', score: 3 },
+      { text: '4+', sub: 'Très souvent', score: 1 },
+    ]
+  },
+  {
+    id: 'duree',
+    category: '⏰ Durée',
+    dimension: 'Qualité',
+    text: 'Combien d\'heures dormez-vous en moyenne par nuit ?',
+    type: 'grid',
+    options: [
+      { emoji: '😵', text: 'Moins de 5h', sub: 'Privation sévère', score: 1 },
+      { emoji: '😕', text: '5 à 6h', sub: 'Légèrement insuffisant', score: 4 },
+      { emoji: '✅', text: '6 à 7h', sub: 'Correct', score: 7 },
+      { emoji: '⭐', text: '7 à 8h', sub: 'Optimal', score: 10 },
+      { emoji: '🛏', text: 'Plus de 8h', sub: 'Long dormeur', score: 8 },
+    ]
+  },
+  {
+    id: 'reveil-qualite',
+    category: '🌅 Réveil',
+    dimension: 'Qualité',
+    text: 'Comment vous sentez-vous au réveil le matin ?',
+    type: 'list',
+    options: [
+      { emoji: '⚡', text: 'Reposé(e) et en forme', sub: 'Plein d\'énergie dès le matin', score: 10 },
+      { emoji: '😐', text: 'Correct, mais pas au top', sub: 'Il me faut un peu de temps', score: 6 },
+      { emoji: '😴', text: 'Fatigué(e), j\'aurais besoin de plus', sub: 'Sensation de dette de sommeil', score: 3 },
+      { emoji: '😩', text: 'Épuisé(e) même après une nuit complète', sub: 'Sommeil non réparateur', score: 1 },
+    ]
+  },
+  {
+    id: 'energie',
+    category: '🔋 Énergie',
+    dimension: 'Énergie',
+    text: 'Dans la journée, ressentez-vous des coups de fatigue ?',
+    type: 'list',
+    options: [
+      { emoji: '✅', text: 'Non, mon énergie est stable', sub: 'Pas de somnolence diurne', score: 10 },
+      { emoji: '☕', text: 'Légère baisse après le déjeuner', sub: 'Normal selon les circadiens', score: 7 },
+      { emoji: '😴', text: 'J\'ai besoin de caféine pour tenir', sub: 'Dépendance compensatoire', score: 4 },
+      { emoji: '💤', text: 'Je m\'endors parfois involontairement', sub: 'Somnolence marquée', score: 1 },
+    ]
+  },
+  {
+    id: 'douleurs',
+    category: '🦴 Confort',
+    dimension: 'Confort',
+    text: 'Ressentez-vous des douleurs ou raideurs au réveil ?',
+    type: 'list',
+    options: [
+      { emoji: '✅', text: 'Non, aucune douleur', sub: 'Confort optimal', score: 10 },
+      { emoji: '🔸', text: 'Légères raideurs passagères', sub: 'Disparaissent rapidement', score: 7 },
+      { emoji: '🔻', text: 'Douleurs lombaires régulières', sub: 'Bas du dos sensible', score: 3 },
+      { emoji: '😣', text: 'Douleurs marquées (dos, nuque, épaules)', sub: 'Impact quotidien', score: 1 },
+    ]
+  },
+  {
+    id: 'confort-matelas',
+    category: '🛏 Literie',
+    dimension: 'Confort',
+    text: 'Comment décririez-vous votre matelas actuel ?',
+    type: 'grid',
+    options: [
+      { emoji: '😩', text: 'Trop mou', sub: 'Je m\'enfonce', score: 3 },
+      { emoji: '😣', text: 'Trop ferme', sub: 'Points de pression', score: 3 },
+      { emoji: '🤔', text: 'Vieilli / usé', sub: 'Plus de soutien', score: 2 },
+      { emoji: '✅', text: 'Confortable', sub: 'Satisfait', score: 9 },
+    ]
+  },
+  {
+    id: 'thermique',
+    category: '🌡️ Thermique',
+    dimension: 'Thermique',
+    text: 'La chaleur vous dérange-t-elle la nuit ?',
+    hint: 'La température du corps chute de 1°C durant le sommeil — clé à La Réunion',
+    type: 'list',
+    options: [
+      { emoji: '✅', text: 'Non, je dors bien quelle que soit la chaleur', sub: 'Thermo-régulation efficace', score: 10 },
+      { emoji: '🌤', text: 'Légèrement gêné(e) en saison chaude', sub: 'Saisonnier', score: 7 },
+      { emoji: '🥵', text: 'Je transpire souvent la nuit', sub: 'Chaleur perturbatrice', score: 3 },
+      { emoji: '🔥', text: 'La chaleur ruine mon sommeil', sub: 'Problème majeur', score: 1 },
+    ]
+  },
+  {
+    id: 'clim',
+    category: '🌡️ Thermique',
+    dimension: 'Thermique',
+    text: 'Utilisez-vous la climatisation ou un ventilateur pour dormir ?',
+    type: 'grid',
+    options: [
+      { emoji: '🌬️', text: 'Clim toujours', sub: 'Nuit toutes saisons', score: 5 },
+      { emoji: '💨', text: 'Ventilateur', sub: 'Circulation d\'air', score: 7 },
+      { emoji: '🌙', text: 'Parfois', sub: 'En saison chaude', score: 8 },
+      { emoji: '🪟', text: 'Jamais', sub: 'Fenêtre ouverte', score: 6 },
+    ]
+  },
+  {
+    id: 'position',
+    category: '🤸 Position',
+    dimension: 'Confort',
+    text: 'Quelle est votre position de sommeil habituelle ?',
+    type: 'grid',
+    options: [
+      { emoji: '🙆', text: 'Sur le dos', sub: 'Position neutre', score: 9 },
+      { emoji: '🤸', text: 'Sur le côté', sub: 'Position fœtale', score: 8 },
+      { emoji: '🛌', text: 'Sur le ventre', sub: 'Peut stresser la nuque', score: 5 },
+      { emoji: '🔄', text: 'Variable', sub: 'Je bouge beaucoup', score: 7 },
+    ]
+  },
+  {
+    id: 'stress',
+    category: '🧠 Stress',
+    dimension: 'Énergie',
+    text: 'Les pensées ou le stress vous empêchent-ils de dormir ?',
+    type: 'scale',
+    scaleLabels: { min: 'Jamais', max: 'Toujours' },
+    options: [
+      { text: '1', sub: 'Jamais', score: 10 },
+      { text: '2', sub: 'Rarement', score: 8 },
+      { text: '3', sub: 'Parfois', score: 5 },
+      { text: '4', sub: 'Souvent', score: 3 },
+      { text: '5', sub: 'Toujours', score: 1 },
+    ]
+  },
+  {
+    id: 'satisfaction',
+    category: '⭐ Satisfaction',
+    dimension: 'Qualité',
+    text: 'En résumé, êtes-vous satisfait(e) de votre sommeil ?',
+    type: 'scale',
+    scaleLabels: { min: 'Pas du tout', max: 'Très satisfait' },
+    options: [
+      { text: '1', sub: 'Pas du tout', score: 1 },
+      { text: '2', sub: 'Peu', score: 3 },
+      { text: '3', sub: 'Moyennement', score: 5 },
+      { text: '4', sub: 'Assez bien', score: 8 },
+      { text: '5', sub: 'Très satisfait', score: 10 },
+    ]
+  },
+];
+
+// ════════════════════════════════════════
+//  STATE
+// ════════════════════════════════════════
+let currentQ = 0;
+let answers = {};
+
+function startQuiz() {
+  showScreen('s-quiz');
+  renderQuestion(0);
+}
+
+// ════════════════════════════════════════
+//  RENDER QUESTION
+// ════════════════════════════════════════
+function renderQuestion(idx) {
+  const q = questions[idx];
+  const total = questions.length;
+  const pct = Math.round(((idx) / total) * 100) + 8;
+
+  document.getElementById('q-count').textContent = `Question ${idx + 1} / ${total}`;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('btn-back').style.visibility = idx > 0 ? 'visible' : 'hidden';
+  document.getElementById('btn-next').disabled = !(answers[q.id] !== undefined);
+
+  let html = `<div class="question-block">
+    <div class="q-category">${q.category}</div>
+    <div class="q-text">${q.text}</div>
+    ${q.hint ? `<div class="q-hint">${q.hint}</div>` : '<div style="margin-bottom:28px"></div>'}`;
+
+  const sel = answers[q.id];
+
+  if (q.type === 'list') {
+    html += `<div class="answers-list">`;
+    q.options.forEach((opt, i) => {
+      html += `<div class="answer-item ${sel === i ? 'selected' : ''}" onclick="selectAnswer(${i})">
+        <div class="answer-emoji">${opt.emoji}</div>
+        <div class="option-content">
+          <div class="answer-text">${opt.text}</div>
+          ${opt.sub ? `<div class="answer-sub">${opt.sub}</div>` : ''}
+        </div>
+        <div class="answer-radio"></div>
+      </div>`;
+    });
+    html += `</div>`;
+  } else if (q.type === 'grid') {
+    html += `<div class="answers-grid">`;
+    q.options.forEach((opt, i) => {
+      html += `<div class="answer-card ${sel === i ? 'selected' : ''}" onclick="selectAnswer(${i})">
+        <span class="answer-card-emoji">${opt.emoji}</span>
+        <div class="answer-card-text">${opt.text}</div>
+        <div class="answer-card-sub">${opt.sub}</div>
+      </div>`;
+    });
+    html += `</div>`;
+  } else if (q.type === 'scale') {
+    html += `<div class="answers-scale">`;
+    q.options.forEach((opt, i) => {
+      html += `<div class="scale-item ${sel === i ? 'selected' : ''}" onclick="selectAnswer(${i})">
+        <div class="scale-num">${opt.text}</div>
+        <div class="scale-label">${opt.sub}</div>
+      </div>`;
+    });
+    html += `</div>`;
+    if (q.scaleLabels) {
+      html += `<div class="scale-extremes"><span>${q.scaleLabels.min}</span><span>${q.scaleLabels.max}</span></div>`;
+    }
+  }
+
+  html += `</div>`;
+  document.getElementById('quiz-body').innerHTML = html;
+  document.getElementById('quiz-body').scrollTop = 0;
+}
+
+function selectAnswer(optIdx) {
+  const q = questions[currentQ];
+  answers[q.id] = optIdx;
+  document.getElementById('btn-next').disabled = false;
+
+  // Update visual selection
+  const containers = ['answers-list', 'answers-grid', 'answers-scale'];
+  document.querySelectorAll('.answer-item, .answer-card, .scale-item').forEach((el, i) => {
+    el.classList.toggle('selected', i === optIdx);
+  });
+}
+
+function nextQuestion() {
+  if (currentQ < questions.length - 1) {
+    currentQ++;
+    renderQuestion(currentQ);
+  } else {
+    computeResults();
+  }
+}
+
+function prevQuestion() {
+  if (currentQ > 0) {
+    currentQ--;
+    renderQuestion(currentQ);
+  }
+}
+
+function skipQuestion() {
+  nextQuestion();
+}
+
+// ════════════════════════════════════════
+//  COMPUTE RESULTS
+// ════════════════════════════════════════
+function computeResults() {
+  showScreen('s-loading');
+
+  // Animate loading steps
+  [1,2,3,4].forEach((n, i) => {
+    setTimeout(() => {
+      document.getElementById('ls-' + n).classList.add('appear');
+    }, i * 400 + 200);
+  });
+
+  setTimeout(() => {
+    buildResults();
+    showScreen('s-result');
+    animateResults();
+  }, 2400);
+}
+
+function buildResults() {
+  // === SCORE CALCULATION ===
+  const dims = { Qualité: [], Énergie: [], Confort: [], Thermique: [] };
+
+  questions.forEach(q => {
+    const ansIdx = answers[q.id];
+    const score = ansIdx !== undefined ? q.options[ansIdx].score : 5;
+    dims[q.dimension].push(score);
+  });
+
+  const dimScores = {};
+  Object.entries(dims).forEach(([dim, scores]) => {
+    dimScores[dim] = Math.round(scores.reduce((a,b) => a+b, 0) / scores.length * 10);
+  });
+
+  const globalScore = Math.round(Object.values(dimScores).reduce((a,b) => a+b, 0) / 4);
+
+  // === GRADE ===
+  let grade, gradeClass, mainTitle, mainSub;
+  if (globalScore >= 75) {
+    grade = '✦ Bon dormeur'; gradeClass = 'grade-good';
+    mainTitle = 'Votre sommeil est globalement sain';
+    mainSub = 'Quelques ajustements peuvent encore optimiser votre récupération et votre confort au quotidien.';
+  } else if (globalScore >= 50) {
+    grade = '⚠ Sommeil fragile'; gradeClass = 'grade-medium';
+    mainTitle = 'Votre sommeil peut s\'améliorer significativement';
+    mainSub = 'Des problèmes identifiés impactent votre récupération. Des solutions adaptées existent pour retrouver un sommeil réparateur.';
+  } else {
+    grade = '🔴 Sommeil perturbé'; gradeClass = 'grade-poor';
+    mainTitle = 'Votre sommeil nécessite une attention urgente';
+    mainSub = 'Votre qualité de sommeil est significativement compromise. Un renouvellement de votre literie et quelques habitudes peuvent transformer votre quotidien.';
+  }
+
+  // === STORE FOR ANIMATION ===
+  window._results = { globalScore, dimScores, grade, gradeClass, mainTitle, mainSub };
+
+  // === DIMENSIONS ===
+  const dimIcons = { Qualité: '😴', Énergie: '🔋', Confort: '🦴', Thermique: '🌡️' };
+  let dimsHtml = '';
+  Object.entries(dimScores).forEach(([dim, score]) => {
+    const cls = score >= 70 ? 'fill-good' : score >= 45 ? 'fill-medium' : 'fill-poor';
+    const label = score >= 70 ? 'Bon' : score >= 45 ? 'À améliorer' : 'Problématique';
+    dimsHtml += `
+      <div class="dimension-row">
+        <div class="dim-top">
+          <div class="dim-name">${dimIcons[dim]} ${dim}</div>
+          <div class="dim-score-text">${score}/100 — ${label}</div>
+        </div>
+        <div class="dim-bar-track">
+          <div class="dim-bar-fill ${cls}" style="width:0%" data-target="${score}%"></div>
+        </div>
+      </div>`;
+  });
+  document.getElementById('dimensions-container').innerHTML = dimsHtml;
+
+  // === INSIGHTS ===
+  const insights = generateInsights(dimScores, answers);
+  document.getElementById('insights-container').innerHTML = insights.map(ins => `
+    <div class="insight-card ${ins.type}">
+      <span class="insight-icon">${ins.icon}</span>
+      <div class="insight-title">${ins.title}</div>
+      <div class="insight-text">${ins.text}</div>
+    </div>
+  `).join('');
+
+  // === RECO ===
+  const reco = generateReco(dimScores, answers);
+  document.getElementById('reco-title').textContent = reco.title;
+  document.getElementById('reco-sub').textContent = reco.sub;
+
+  // === TIPS ===
+  const tips = generateTips(dimScores, answers);
+  document.getElementById('tips-container').innerHTML = tips.map(t => `
+    <div class="tip-row">
+      <span class="tip-icon">${t.icon}</span>
+      <div class="tip-text">${t.text}</div>
+    </div>
+  `).join('');
+
+  // === HEADER ===
+  document.getElementById('result-grade').textContent = grade;
+  document.getElementById('result-grade').className = 'result-grade ' + gradeClass;
+  document.getElementById('result-main-title').textContent = mainTitle;
+  document.getElementById('result-main-sub').textContent = mainSub;
+
+  // === SHARE CODE ===
+  const code = 'GL-' + globalScore + '-' + Date.now().toString(36).slice(-4).toUpperCase();
+  document.getElementById('share-code').textContent = 'Code : ' + code;
+}
+
+function animateResults() {
+  const { globalScore, dimScores } = window._results;
+
+  // Animate score number
+  let n = 0;
+  const interval = setInterval(() => {
+    n = Math.min(n + 2, globalScore);
+    document.getElementById('score-num').textContent = n;
+    if (n >= globalScore) clearInterval(interval);
+  }, 20);
+
+  // Animate donut
+  const circumference = 2 * Math.PI * 46;
+  setTimeout(() => {
+    const fill = Math.round((globalScore / 100) * circumference);
+    document.getElementById('donut-fill').setAttribute('stroke-dasharray', fill + ' ' + circumference);
+    const color = globalScore >= 75 ? '#34d399' : globalScore >= 50 ? '#fbbf24' : '#f87171';
+    document.getElementById('donut-fill').setAttribute('stroke', color);
+  }, 100);
+
+  // Animate bars
+  setTimeout(() => {
+    document.querySelectorAll('.dim-bar-fill').forEach(el => {
+      el.style.width = el.dataset.target;
+    });
+  }, 300);
+}
+
+// ════════════════════════════════════════
+//  INSIGHT GENERATOR
+// ════════════════════════════════════════
+function generateInsights(dimScores, answers) {
+  const insights = [];
+  const thermQ = answers['thermique'];
+  const douleurQ = answers['douleurs'];
+  const qualiteQ = answers['reveil-qualite'];
+  const matelasQ = answers['confort-matelas'];
+
+  if (dimScores['Qualité'] >= 75) {
+    insights.push({ type: 'positive', icon: '✅', title: 'Bonne qualité de sommeil', text: 'Votre rythme et vos cycles de sommeil sont dans de bonnes normes.' });
+  } else {
+    insights.push({ type: 'warning', icon: '⚠️', title: 'Qualité à améliorer', text: 'Vos cycles de sommeil sont perturbés. Un environnement de couchage adapté peut faire la différence.' });
+  }
+
+  if (thermQ !== undefined && thermQ >= 2) {
+    insights.push({ type: 'alert', icon: '🌡️', title: 'Chaleur perturbatrice', text: 'Sous le climat réunionnais, un matelas à technologie climatisante améliore significativement la qualité du sommeil.' });
+  } else {
+    insights.push({ type: 'positive', icon: '❄️', title: 'Confort thermique OK', text: 'Votre gestion de la température nocturne n\'est pas un facteur limitant majeur.' });
+  }
+
+  if (douleurQ !== undefined && douleurQ >= 2) {
+    insights.push({ type: 'alert', icon: '🦴', title: 'Douleurs matinales détectées', text: 'Les douleurs au réveil sont souvent liées à un mauvais soutien du matelas. Cela mérite une attention prioritaire.' });
+  }
+
+  if (matelasQ !== undefined && matelasQ <= 2) {
+    insights.push({ type: 'warning', icon: '🛏', title: 'Literie inadaptée', text: 'Votre matelas ne semble plus répondre à vos besoins. Un renouvellement peut transformer vos nuits.' });
+  }
+
+  if (dimScores['Énergie'] < 50) {
+    insights.push({ type: 'warning', icon: '🔋', title: 'Fatigue diurne', text: 'Vos nuits ne permettent pas une récupération optimale, ce qui impacte votre énergie dans la journée.' });
+  }
+
+  return insights.slice(0, 4);
+}
+
+// ════════════════════════════════════════
+//  RECO GENERATOR
+// ════════════════════════════════════════
+function generateReco(dimScores, answers) {
+  const thermQ = answers['thermique'];
+  const douleurQ = answers['douleurs'];
+  const positionQ = answers['position'];
+
+  if (thermQ !== undefined && thermQ >= 2 && douleurQ !== undefined && douleurQ >= 2) {
+    return {
+      title: 'Matelas respirant avec soutien renforcé',
+      sub: 'Votre profil combine chaleur nocturne et douleurs matinales — nos modèles à ressorts ensachés climatisants avec zones de soutien lombaire sont idéalement adaptés au climat réunionnais.'
+    };
+  } else if (thermQ !== undefined && thermQ >= 2) {
+    return {
+      title: 'Matelas à technologie climatisante',
+      sub: 'La chaleur perturbe significativement votre sommeil. Nos matelas avec tissu Tencel® ou traitement thermique actif régulent naturellement la température corporelle noctune.'
+    };
+  } else if (douleurQ !== undefined && douleurQ >= 2) {
+    return {
+      title: 'Matelas à soutien ciblé — votre dos le mérite',
+      sub: 'Les douleurs au réveil signalent un défaut de soutien. Nos modèles à zones de soutien différenciées s\'adaptent à votre morphologie pour supprimer les points de pression.'
+    };
+  } else {
+    return {
+      title: 'Découvrez votre matelas idéal',
+      sub: 'Votre profil personnalisé nous permet de vous orienter vers la solution de literie qui correspond exactement à votre façon de dormir et à vos besoins de confort.'
+    };
+  }
+}
+
+// ════════════════════════════════════════
+//  TIPS GENERATOR
+// ════════════════════════════════════════
+function generateTips(dimScores, answers) {
+  const tips = [];
+  const thermQ = answers['thermique'];
+  const stressQ = answers['stress'];
+  const endormQ = answers['endormissement'];
+  const dureQ = answers['duree'];
+
+  if (thermQ !== undefined && thermQ >= 2) {
+    tips.push({ icon: '🌡️', text: '<strong>Température de la chambre :</strong> Visez 18–20°C pour une nuit optimale. Même avec un ventilateur, un matelas non respirant accumule la chaleur corporelle.' });
+  }
+
+  if (stressQ !== undefined && stressQ >= 2) {
+    tips.push({ icon: '🧘', text: '<strong>Routine de déconnexion :</strong> Éteignez les écrans 30 min avant le coucher. Une routine calme (lecture, étirements) signale à votre cerveau qu\'il est temps de dormir.' });
+  }
+
+  if (endormQ !== undefined && endormQ >= 2) {
+    tips.push({ icon: '⏰', text: '<strong>Régularité des horaires :</strong> Se coucher et se lever à heures fixes (même le week-end) est le facteur n°1 d\'amélioration du temps d\'endormissement.' });
+  }
+
+  if (dureQ !== undefined && dureQ <= 1) {
+    tips.push({ icon: '💤', text: '<strong>Durée :</strong> Les adultes ont besoin de 7 à 9h de sommeil. Moins de 6h chroniques augmente le risque cardiovasculaire et affaiblit l\'immunité.' });
+  }
+
+  tips.push({ icon: '🛏', text: '<strong>Votre literie :</strong> Un matelas de plus de 7 ans ne soutient plus correctement votre corps, même sans dégradation visible. Nos conseillers peuvent évaluer votre situation gratuitement.' });
+
+  return tips.slice(0, 4);
+}
+
+// ════════════════════════════════════════
+//  NAVIGATION
+// ════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function callVendeur() {
+  // Flash a notification to grab store staff attention
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position:fixed; inset:0; background:rgba(18,21,26,0.85);
+    display:flex; align-items:center; justify-content:center;
+    z-index:9999; animation:fadeIn 0.3s ease;
+  `;
+  overlay.innerHTML = `
+    <div style="background:white; border-radius:20px; padding:40px; text-align:center; max-width:380px; margin:20px; animation:fadeIn 0.4s ease;">
+      <div style="font-size:48px; margin-bottom:16px;">🛎</div>
+      <div style="font-family:'Playfair Display',serif; font-size:26px; color:#12151a; margin-bottom:8px;">Un conseiller arrive</div>
+      <div style="font-size:15px; color:#718096; margin-bottom:24px; line-height:1.6;">Notre équipe a été notifiée. Montrez votre bilan sommeil au conseiller pour une recommandation personnalisée.</div>
+      <button onclick="this.closest('div[style*=fixed]').remove()" style="background:#12151a; color:white; border:none; padding:14px 32px; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:15px; font-weight:600; cursor:pointer;">
+        Merci, j'attends →
+      </button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  overlay.onclick = (e) => { if(e.target === overlay) overlay.remove(); };
+}
+
+function restartApp() {
+  answers = {};
+  currentQ = 0;
+  showScreen('s-attract');
+}
+
+// Auto-return to attract after 3 min inactivity
+let inactivityTimer;
+function resetInactivity() {
+  clearTimeout(inactivityTimer);
+  inactivityTimer = setTimeout(() => {
+    const active = document.querySelector('.screen.active');
+    if (active && active.id !== 's-attract') restartApp();
+  }, 180000);
+}
+document.addEventListener('touchstart', resetInactivity);
+document.addEventListener('click', resetInactivity);
+resetInactivity();
+</script>
+</body>
+</html>
